@@ -27,7 +27,7 @@ client.connect(err => {
             })
     });
 
-    app.get('/getEventsByTitle', (req, res) => { // get all events ny user
+    app.get('/getEventsByTitle', (req, res) => { // event search
         const filter = req.query.title;
         eventCollections.find({ title: { $regex: filter } })
             .toArray((err, documents) => {
@@ -80,5 +80,5 @@ client.connect(err => {
 
 });
 
-// app.listen(process.env.PORT || 5000);
-app.listen(5000);
+app.listen(process.env.PORT || 5000);
+
