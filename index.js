@@ -23,35 +23,43 @@ client.connect(err => {
     app.get('/events', (req, res) => { // get all events
         eventCollections.find({})
             .toArray((err, documents) => {
-                res.send(documents);
+                res.status(200).send(documents);
+            })
+    });
+
+    app.get('/getEventsByTitle', (req, res) => { // get all events ny user
+        const filter = req.query.title;
+        eventCollections.find({ title: { $regex: filter } })
+            .toArray((err, documents) => {
+                res.status(200).send(documents);
             })
     });
 
     app.post('/addEvent', (req, res) => { // add single event
         eventCollections.insertOne(req.body)
             .then(result => {
-                res.send(result.insertedCount > 0);
+                res.status(200).send(result.insertedCount > 0);
             })
     });
 
     app.get('/events/:key', (req, res) => { // get single event     
         eventCollections.find({ _id: ObjectID(req.params.key) })
             .toArray((err, documents) => {
-                res.send(documents[0]);
+                res.status(200).send(documents[0]);
             })
     });
 
     app.get('/getVolunteers', (req, res) => { // get all volunteers
         volunteerCollections.find({})
             .toArray((err, documents) => {
-                res.send(documents);
+                res.status(200).send(documents);
             })
     });
 
-    app.post('/addVolunteer', (req, res) => {
+    app.post('/addVolunteer', (req, res) => { // add a new volunteer
         volunteerCollections.insertOne(req.body)
             .then(result => {
-                res.send(result.insertedCount > 0);
+                res.status(200).send(result.insertedCount > 0);
             })
     });
 
@@ -59,17 +67,18 @@ client.connect(err => {
         const userEmail = req.query.email;
         volunteerCollections.find({ email: userEmail })
             .toArray((err, documents) => {
-                res.send(documents);
+                res.status(200).send(documents);
             })
     });
 
-    app.delete('/delete/:id', (req, res) => {
+    app.delete('/delete/:id', (req, res) => { // delete register volunteer
         volunteerCollections.deleteOne({ _id: ObjectID(req.params.id) })
             .then(result => {
-                res.send(result.deletedCount > 0);
+                res.status(200).send(result.deletedCount > 0);
             })
     })
 
 });
 
-app.listen(process.env.PORT || 5000);
+// app.listen(process.env.PORT || 5000);
+app.listen(5000);
